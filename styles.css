@@ -58,6 +58,8 @@ section {
   flex-wrap: wrap;
   background-color: purple;
   text-align: center;
+  justify-content: center;
+  justify-items: center;
   border: 3px gold solid;
   margin: 10px;
   width: auto;
