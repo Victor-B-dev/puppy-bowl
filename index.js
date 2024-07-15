@@ -36,44 +36,49 @@ const getSinglePuppy = async(puppyID) => {
 // Render from state to HTML in UL
 // each puppy element is selectable for more info
 const renderPuppies = () => {
-  const ul = document.createElement(`ul`)
+  const section = document.createElement(`section`)
   const puppyInfo = state.allPuppies.map((singlePuppy) => {
-    return `<li> ${singlePuppy.id} </li>
+    return ` <article class="player"> 
+            <img src="${singlePuppy.imageUrl}">
+            <article class="player-id"> ${singlePuppy.id} </article> <br>
             <p> Click the # for more info about this puppy </p>
-            <img src="${singlePuppy.imageUrl}">`;
+            </article>
+            `;
   });
 
-  ul.innerHTML = (puppyInfo.join(``));
-  main.replaceChildren(ul)
+  section.innerHTML = (puppyInfo.join(``));
+  main.replaceChildren(section)
 
 // clicking on a puppy (li element)
 // will need to update the state.selectedPuppy with info
 // use that to clear out the main.html and display all of selected puppys info
 // need to create/add a button that will renderPuppies again. 
 
-  const li = document.querySelectorAll(`li`)
+  const id = document.querySelectorAll(`.player-id`)
 
-  li.forEach((puppyLI) => {
-    puppyLI.addEventListener(`click`, (event) => {
-      const id = event.target.innerText;
-      getSinglePuppy(id);
+  id.forEach((puppyID) => {
+    puppyID.addEventListener(`click`, (event) => {
+      const player_id = event.target.innerText;
+      getSinglePuppy(player_id);
     })
   });
 }
 
 const renderSinglePuppy = () => {
-  const html = `
-  <h2> Name: ${state.selectedPuppy.name} </h2>
+  const html = `<section>
+    <article class="player">
 
-  <p> Breed: ${state.selectedPuppy.breed} <Br>
+      <img src="${state.selectedPuppy.imageUrl}">
+      <h2> Name: ${state.selectedPuppy.name} </h2>
+
+      <p> Breed: ${state.selectedPuppy.breed} <Br>
       Team: ${state.selectedPuppy.teamId} <Br>
-      Cohort: ${state.selectedPuppy.cohortID} <br>
+      Cohort: ${state.selectedPuppy.cohortId} <br>
       Status: ${state.selectedPuppy.status}
-  </p>
-
-  <img src="${state.selectedPuppy.imageUrl}"> <br>
-  
-    <button> Back to the Other Puppies </button>
+      </p>
+      <button> Back </button>
+      </article>
+    </section>
   `;
 
   main.innerHTML = html;
