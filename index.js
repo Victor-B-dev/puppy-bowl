@@ -49,7 +49,7 @@ const renderPuppies = () => {
   section.innerHTML = (puppyInfo.join(``));
   main.replaceChildren(section)
 
-// clicking on a puppy (li element)
+// clicking on a puppy 
 // will need to update the state.selectedPuppy with info
 // use that to clear out the main.html and display all of selected puppys info
 // need to create/add a button that will renderPuppies again. 
