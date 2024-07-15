@@ -17,6 +17,7 @@ const getTeams = async () => {
 
     state.teamRuff = events.data.teams[0]
     state.teamFluff = events.data.teams[1]
+    console.log(state.teamFluff)
     renderTeams();
     } catch (err){
       console.log(err);
