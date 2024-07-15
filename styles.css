@@ -5,6 +5,11 @@
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
   background-color: black;
 }
 
@@ -13,6 +18,7 @@ header {
   justify-content: space-between;
   align-items: center;
   background-color: yellow;
+  width: 100%;
 }
 
 #logo {
@@ -26,16 +32,24 @@ nav {
   flex-wrap: wrap;
 }
 
+a {
+  margin: 2px;
+}
+
 h1 {
   color: gold;
-  text-align: center
+  text-align: center;
+  margin: 20px;
 }
 
 main {
   display: flex;
-  flex: flex-wrap;
+  flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+  align-content: center;
   width: auto;
+  padding: 5px;
   height: auto;
 }
 
@@ -45,7 +59,7 @@ section {
   background-color: purple;
   text-align: center;
   border: 3px gold solid;
-  margin: 5px;
+  margin: 10px;
   width: auto;
   height: auto;
 }
