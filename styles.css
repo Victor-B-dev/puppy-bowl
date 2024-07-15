@@ -1,0 +1,21 @@
+body {
+  display: flexbox;
+  background-color: gray;
+}
+
+header {
+  display: flexbox;
+  flex-direction: row;
+  justify-content: space-around;
+  text-align: space-around;
+  background-color: yellow;
+}
+
+main {
+  display: flexbox;
+}
+
+section {
+  display: flexbox;
+  background-color: purple;
+}
