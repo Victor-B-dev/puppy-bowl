@@ -90,6 +90,10 @@ img {
   color:chartreuse
 }
 
-button {
+#allPuppiesButton {
   background-color: gray;
+}
+
+.hidden {
+  display:none
 }

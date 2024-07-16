@@ -2,12 +2,31 @@
 const state = {
   allPuppies: [],
   selectedPuppy: {},
+  teamRuff: [],
+  teamFluff: [],
 }
 
 // dom selectors
 const main = document.querySelector(`main`)
+const sectionOne = document.querySelector(`.one`)
+const sectionTwo = document.querySelector(`.two`)
+const h1 = document.querySelector(`h1`)
+const form = document.querySelector(`form`)
 
-// call API & store in state
+// dom select for nav bar
+const allPuppiesNav = document.querySelector(`#allPuppiesButton`)
+const teamsNav = document.querySelector(`#teamsButton`)
+const addPuppyNav = document.querySelector(`#addPuppy`)
+
+// dom selector for form
+const dogName = document.querySelector(`#dogName`)
+const breed = document.querySelector(`#breed`)
+const position = document.querySelector(`#status`)
+const imageButton = document.querySelector(`#myImage`)
+const submitButton = document.querySelector(`#formSubmit`)
+
+
+// call API for all puppies & store in state
 const getPuppies = async () => {
   try{
     const response = await fetch(`https://fsa-puppy-bowl.herokuapp.com/api/2406-FTB-ET-WEB-FT/players`);
@@ -33,10 +52,35 @@ const getSinglePuppy = async(puppyID) => {
   }
 }
 
-// Render from state to HTML in UL
+// getting teams info
+const getTeams = async () => {
+  try{
+    const response = await fetch(`https://fsa-puppy-bowl.herokuapp.com/api/2406-FTB-ET-WEB-FT/teams`);
+    const events = await response.json();
+
+    state.teamRuff = events.data.teams[0]
+    state.teamFluff = events.data.teams[1]
+    } catch (err){
+      console.log(err);
+  }
+}
+
+
+// buttons for navigation/rendering
+allPuppiesNav.addEventListener('click', () => {
+  renderPuppies();
+})
+teamsNav.addEventListener('click', ()=> {
+  renderTeams();
+})
+addPuppyNav.addEventListener('click', () => {
+  renderForm();
+})
+
+
+// Render all puppies from state to HTML via loop, each puppy is an article
 // each puppy element is selectable for more info
 const renderPuppies = () => {
-  const section = document.createElement(`section`)
   const puppyInfo = state.allPuppies.map((singlePuppy) => {
     return ` <article class="player"> 
             <img src="${singlePuppy.imageUrl}">
@@ -46,8 +90,10 @@ const renderPuppies = () => {
             `;
   });
 
-  section.innerHTML = (puppyInfo.join(``));
-  main.replaceChildren(section)
+  h1.innerText = `Meet the Competitors`;
+  sectionOne.innerHTML = (puppyInfo.join(``));
+  sectionTwo.innerHTML = ``;
+  main.replaceChildren(sectionOne)
 
 // clicking on a puppy 
 // will need to update the state.selectedPuppy with info
@@ -64,6 +110,7 @@ const renderPuppies = () => {
   });
 }
 
+// turns the section into displaying singular puppy
 const renderSinglePuppy = () => {
   const html = `<section>
     <article class="player">
@@ -76,17 +123,102 @@ const renderSinglePuppy = () => {
       Cohort: ${state.selectedPuppy.cohortId} <br>
       Status: ${state.selectedPuppy.status}
       </p>
-      <button> Back </button>
+      <button id="backButton"> Back </button>
       </article>
     </section>
   `;
 
+  h1.innerText = `This Goodest Dog`;
   main.innerHTML = html;
 
-  const backButton = document.querySelector(`button`);
+  const backButton = document.querySelector(`#backButton`);
   backButton.addEventListener(`click`, ()=>{
     renderPuppies();
   })
 }
 
+// display each team in two sections, one team per section
+const renderTeams = () => {
+  const ruffPlayerInfo = state.teamRuff.players.map((singlePuppy) => {
+    return ` <article class="player"> 
+            <img src="${singlePuppy.imageUrl}">
+            Name: ${singlePuppy.name} <Br>
+            Breed: ${singlePuppy.breed} <br>
+            Position: ${singlePuppy.status}
+            </article>
+            `;
+  });
+
+  // at time of writing this code, team fluff has no puppies in it. so it doesn't render anything
+  const fluffPlayerInfo = state.teamFluff.players.map((singlePuppy) => {
+    return ` <article class="player"> 
+            <img src="${singlePuppy.imageUrl}">
+            Name: ${singlePuppy.name} <Br>
+            Breed: ${singlePuppy.breed} <br>
+            Position: ${singlePuppy.status}
+            </article>
+            `;
+  });
+
+  h1.innerText = `Meet the Teams`;
+  sectionOne.innerHTML = ruffPlayerInfo;
+  sectionTwo.innerHTML = fluffPlayerInfo;
+}
+
+const renderForm = () => {
+  sectionOne.innerHTML = ` 
+  <form>
+    <label name="dogName"> Dog Name:</label>
+    <input type="text" id="dogName" name="dogName"> <br>
+
+    <label name="breed"> Breed: </label>
+    <input type="text" id="breed" name="breed"> <br>
+
+    <label for="Status">Choose a status:</label>
+      <select id="status" name="status">
+      <option value="bench">Bench</option>
+      <option value="field">Field</option>
+    </select> <br>
+
+    <input type="file" id="myImage" name="filename"> <br>
+      
+    <input type="submit" id="formSubmit" value="submit">
+  </form>
+`;
+  sectionTwo.innerHTML = ``;
+}
+
+
+// post to API
+// would need to add eventlistener to submit buttons
+// don't want to accidentally submit something so intentionally not leave it, want to discuss in morning office hours
+// need to make sure targeting the correct submit buttons
+const submitForm = async() => {
+  try {
+    const response = await fetch(
+      'https://fsa-puppy-bowl.herokuapp.com/api//players',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        // here is taking the info from the html page to submit.
+        body: JSON.stringify({
+          name: dogName.value,
+          breed: breed.value,
+          status: position.value,
+          cohortId: 438,
+          teamId: 777,
+        }),
+      }
+    );
+  const result = await response.json();
+  console.log(result);
+} catch (err) {
+  console.error(err);
+}
+}
+
 getPuppies();
+getTeams();
